@@ -1,0 +1,17 @@
+name: Dreamworld
+main: de.blablubbabc.dreamworld.Dreamworld
+version: 0.2
+author: blablubbabc
+description: Dreamworld by blablubbabc.
+softdepend: [Multiverse-Core, My Worlds, Transporter]
+commands:
+    dw:
+      description: Dreamworld commands.
+      usage: /<command> help
+permissions:
+  dreamworld.dream:
+    description: Ability to dream.
+    default: true
+  dreamworld.admin:
+    description: Access to the admin commands.
+    default: false
