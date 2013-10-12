@@ -85,6 +85,7 @@ dream:
   # Disable various stuff for the dreaming player:
   disabled:
     hunger: true
+    # Damage settings: If the player dies, he leaves his dream. If the player falls into the void but all damage is disable, he will be respawned at some dream spawn.
     fall damage: true
     entity damage: true
     all damage: true
