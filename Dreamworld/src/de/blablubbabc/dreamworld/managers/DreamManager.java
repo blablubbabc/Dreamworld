@@ -53,10 +53,9 @@ public class DreamManager {
 		}, 20L, 20L);
 	}
 	
-	// currently unused:
-	/*private void leaveDream(Player player) {
+	private void leaveDream(Player player) {
 		leaveDream(player, dreamingPlayers.remove(player.getName()));
-	}*/
+	}
 	
 	private void leaveDream(Player player, DreamData dreamData) {
 		if (dreamData != null) {
@@ -70,6 +69,10 @@ public class DreamManager {
 	
 	public boolean isDreaming(String playerName) {
 		return dreamingPlayers.containsKey(playerName);
+	}
+	
+	public void onPlayerDeath(Player player) {
+		leaveDream(player);
 	}
 	
 	private void startDreaming(Player player) {
