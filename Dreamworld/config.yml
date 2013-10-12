@@ -58,9 +58,6 @@ dream:
 
   # Whether or not the player shall be completely cleared on enter and restored on exit:
   clear and restore player: true
-
-  # Whether or not the player shall stop dreaming upon leaving the dream world:
-  stop on world leaving: true
   
   # Purge saved dream data after this amount of minutes (should be higher than the max dream duration):
   purge saved dream data after x minutes: 4320

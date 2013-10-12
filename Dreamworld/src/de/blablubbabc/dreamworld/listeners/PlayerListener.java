@@ -22,10 +22,6 @@ public class PlayerListener extends AbstractListener {
 		super(plugin);
 	}
 
-	public boolean stopOnWorldChange;
-
-	public boolean weatherDisabled;
-
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBedLeave(PlayerBedLeaveEvent event) {
 		plugin.getDreamManager().onBedLeave(event.getPlayer());
@@ -57,7 +53,7 @@ public class PlayerListener extends AbstractListener {
 		if (event.getEntityType() == EntityType.PLAYER) {
 			DamageCause cause = event.getCause();
 			ConfigManager config = plugin.getConfigManager();
-			if ((cause == DamageCause.FALL && config.fallDamageDisabled) || (cause == DamageCause.ENTITY_ATTACK && config.entityDamageDisabled)) {
+			if ((cause == DamageCause.FALL && config.fallDamageDisabled) || ((cause == DamageCause.ENTITY_ATTACK || cause == DamageCause.PROJECTILE) && config.entityDamageDisabled)) {
 				Player player = (Player) event.getEntity();
 				if (plugin.getDreamManager().isDreaming(player.getName())) {
 					event.setCancelled(true);

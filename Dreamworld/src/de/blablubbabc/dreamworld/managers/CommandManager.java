@@ -35,7 +35,7 @@ public class CommandManager implements CommandExecutor {
 			}
 			
 			if (args[0].equalsIgnoreCase("help")) {
-				sender.sendMessage(ChatColor.WHITE + "*~*~" + ChatColor.AQUA + "Dreamworld Help" + ChatColor.WHITE + "~*~*");
+				sender.sendMessage(ChatColor.WHITE + "     ~~~ " + ChatColor.AQUA + "Dreamworld Help" + ChatColor.WHITE + " ~~~    ");
 				sender.sendMessage(ChatColor.GOLD + "/dw setspawn" + ChatColor.WHITE + " - " + ChatColor.DARK_AQUA + "Sets the spawn location of your current world.");
 				sender.sendMessage(ChatColor.GOLD + "/dw dspawn" + ChatColor.WHITE + " - " + ChatColor.DARK_AQUA + "Teleports you to the dream world.");
 				sender.sendMessage(ChatColor.GOLD + "/dw addspawn" + ChatColor.WHITE + " - " + ChatColor.DARK_AQUA + "Adds your current location to the list of random dream spawns.");

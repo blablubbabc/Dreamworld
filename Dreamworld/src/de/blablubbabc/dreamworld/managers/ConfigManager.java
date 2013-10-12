@@ -43,7 +43,6 @@ public class ConfigManager {
 	public List<PotionEffect> initialPotionEffects;
 	
 	public boolean clearAndRestorePlayer;
-	public boolean stopOnWorldChange;
 	public int purgeAfterMinutes;
 	public int ignoreIfRemainingTimeIsLowerThan;
 	
@@ -114,7 +113,6 @@ public class ConfigManager {
 			}
 			
 			clearAndRestorePlayer = dreamSection.getBoolean("clear and restore player");
-			stopOnWorldChange = dreamSection.getBoolean("stop on world leaving");
 			purgeAfterMinutes = dreamSection.getInt("purge saved dream data after x minutes");
 			ignoreIfRemainingTimeIsLowerThan = dreamSection.getInt("ignore if remaining seconds is lower than");
 			
