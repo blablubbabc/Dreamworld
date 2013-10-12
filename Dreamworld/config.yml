@@ -1,0 +1,95 @@
+#--------------------------------#
+#           Dreamworld           |
+#--------------------------------#
+
+# All dream settings:
+dream:
+
+  # If no world with this name exists, it will create one.
+  # If you want to use a custom generator, I suggest you to first generate the dream world with a plugin like Multiverse.
+  world name: 'dreamworld'
+
+  # Whether or not animals and monsters shall spawn:
+  no animal spawning: true
+  no monster spawning: false
+
+  # The chance that leaving a bed leads to a dream (between 0 and 100):
+  chance: 25
+
+  # The minimal and maximal durations for dreams in seconds:
+  min duration in seconds: 25
+  max duration in seconds: 300
+
+  # Whether or not the player shall spawn at one of the random spawns when he starts dreaming, instead of the dream worlds spawn:
+  spawn randomly each time: true
+  random spawns: []
+
+  # The gamemode, health, hunger and potion effects a player starts with:
+  gamemode:
+    apply: true
+    initial gamemode: 2
+  health:
+    apply: true
+    initial health: 20.0
+  hunger:
+    apply: true
+    initial hunger: 20
+  potion effects:
+    apply: true
+    initial potion effects:
+      SLOW_DIGGING:
+        duration: 2147483647
+        level: 20
+      JUMP:
+        duration: 2147483647
+        level: 10
+      SPEED:
+        duration: 2147483647
+        level: 2
+      CONFUSION:
+        duration: 2147483647
+        level: 1
+      NIGHT_VISION:
+        duration: 2147483647
+        level: 100
+      BLINDNESS:
+        duration: 2147483647
+        level: 100
+
+  # Whether or not the player shall be completely cleared on enter and restored on exit:
+  clear and restore player: true
+
+  # Whether or not the player shall stop dreaming upon leaving the dream world:
+  stop on world leaving: true
+  
+  # Purge saved dream data after this amount of minutes (should be higher than the max dream duration):
+  purge saved dream data after x minutes: 4320
+  
+  # If the remaining dream seconds are less than those of this setting, the player will skips those remaining seconds if he disconnects or attempts to continue his dream on login:
+  ignore if remaining seconds is lower than: 10
+
+  # Whether or not the player's personal visual time shall be modified:
+  fake client time:
+    enabled: true
+
+    # The time to which the client will be set:
+    time (in ticks): 12000
+
+    # Set the time randomly instead? These bounds determine how much the time will randomly differ from the time defined above:
+    random bounds: 0
+
+    # The client's time will not change during the dream with this enabled:
+    fixed time: true
+
+  # Whether or not it shall rain for the dreaming player:
+  fake client weather:
+    raining: true
+
+  # Disable various stuff for the dreaming player:
+  disabled:
+    hunger: true
+    fall damage: true
+    entity damage: true
+    item dropping: false
+    item pickup: false
+    weather: false
