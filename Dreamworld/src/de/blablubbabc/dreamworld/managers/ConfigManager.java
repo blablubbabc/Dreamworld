@@ -63,6 +63,9 @@ public class ConfigManager {
 	public boolean itemDroppingDisabled;
 	public boolean itemPickupDisabled;
 	
+	// allowed commands:
+	public List<String> allowedCommands;
+	
 	
 	public ConfigManager(Plugin plugin) {
 		this.plugin = plugin;
@@ -134,6 +137,10 @@ public class ConfigManager {
 			weatherDisabled = disabledSection.getBoolean("weather");
 			itemDroppingDisabled = disabledSection.getBoolean("item dropping");
 			itemPickupDisabled = disabledSection.getBoolean("item pickup");
+			
+			// allowed commands:
+			allowedCommands = dreamSection.getStringList("allowed commands");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			plugin.getLogger().severe("Something went wrong during the reading of the config file! Please verify that all your values are valid! Disabling now.");

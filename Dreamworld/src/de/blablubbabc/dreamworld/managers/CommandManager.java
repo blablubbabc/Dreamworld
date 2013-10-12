@@ -1,7 +1,9 @@
 package de.blablubbabc.dreamworld.managers;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -34,10 +36,11 @@ public class CommandManager implements CommandExecutor {
 				return true;
 			}
 			
-			if (args[0].equalsIgnoreCase("help")) {
+			if (args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("?")) {
 				sender.sendMessage(ChatColor.WHITE + "     ~~~ " + ChatColor.AQUA + "Dreamworld Help" + ChatColor.WHITE + " ~~~    ");
 				sender.sendMessage(ChatColor.GOLD + "/dw setspawn" + ChatColor.WHITE + " - " + ChatColor.DARK_AQUA + "Sets the spawn location of your current world.");
 				sender.sendMessage(ChatColor.GOLD + "/dw dspawn" + ChatColor.WHITE + " - " + ChatColor.DARK_AQUA + "Teleports you to the dream world.");
+				sender.sendMessage(ChatColor.GOLD + "/dw spawn" + ChatColor.WHITE + " - " + ChatColor.DARK_AQUA + "Teleports you to the main world's spawn.");
 				sender.sendMessage(ChatColor.GOLD + "/dw addspawn" + ChatColor.WHITE + " - " + ChatColor.DARK_AQUA + "Adds your current location to the list of random dream spawns.");
 				sender.sendMessage(ChatColor.GOLD + "/dw clearspawns" + ChatColor.WHITE + " - " + ChatColor.DARK_AQUA + "Clears the list of random dream spawns.");
 			} else if (args[0].equalsIgnoreCase("setspawn")) {
@@ -53,6 +56,11 @@ public class CommandManager implements CommandExecutor {
 			} else if (args[0].equalsIgnoreCase("clearspawns") || args[0].equalsIgnoreCase("clearspawns")) {
 				plugin.getConfigManager().removeAllSpawnLocations();
 				player.sendMessage(ChatColor.GREEN + "All random dream spawns were removed!");
+			} else if (args[0].equalsIgnoreCase("spawn")) {
+				World world = Bukkit.getServer().getWorlds().get(0);
+				player.leaveVehicle();
+				player.teleport(world.getSpawnLocation());
+				player.sendMessage(ChatColor.GREEN + "You were teleported to world '" + ChatColor.WHITE + world.getName() + ChatColor.GREEN + "'.");
 			}
 			
 			return true;

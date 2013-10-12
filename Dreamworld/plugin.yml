@@ -15,4 +15,4 @@ permissions:
     default: true
   dreamworld.admin:
     description: Access to the admin commands.
-    default: false
+    default: op
