@@ -1,5 +1,5 @@
 name: Dreamworld
-main: de.blablubbabc.dreamworld.Dreamworld
+main: de.blablubbabc.dreamworld.DreamworldPlugin
 version: 1.0
 author: blablubbabc
 description: Dreamworld by blablubbabc.
