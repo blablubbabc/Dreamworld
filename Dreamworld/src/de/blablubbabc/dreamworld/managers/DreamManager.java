@@ -75,6 +75,18 @@ public class DreamManager {
 		leaveDream(player);
 	}
 	
+	public void spawnPlayer(Player player) {
+		ConfigManager config = plugin.getConfigManager();
+		Location dreamSpawn = null;
+		if (!config.spawnRandomly || config.dreamSpawns.isEmpty() || (dreamSpawn = config.dreamSpawns.get(random.nextInt(config.dreamSpawns.size())).getBukkitLocation()) == null) {
+			World dreamWorld = plugin.getDreamWorld();
+			dreamSpawn = dreamWorld.getSpawnLocation();
+		}
+		
+		player.leaveVehicle(); // just in case..
+		player.teleport(dreamSpawn);
+	}
+	
 	private void startDreaming(Player player) {
 		String playerName = player.getName();
 		if (isDreaming(playerName)) return;
@@ -93,15 +105,7 @@ public class DreamManager {
 		// do initialization:
 		
 		// spawn:
-		Location dreamSpawn = null;
-		if (!config.spawnRandomly || config.dreamSpawns.isEmpty()
-				|| (dreamSpawn = config.dreamSpawns.get(random.nextInt(config.dreamSpawns.size())).getBukkitLocation()) == null) {
-			World dreamWorld = plugin.getDreamWorld();
-			dreamSpawn = dreamWorld.getSpawnLocation();
-		}
-		
-		player.leaveVehicle(); // just in case..
-		player.teleport(dreamSpawn);
+		spawnPlayer(player);
 		
 		if (config.applyInitialGamemode) player.setGameMode(config.initialGamemode);
 		if (config.applyInitialHealth) player.setHealth(config.initialHealth);

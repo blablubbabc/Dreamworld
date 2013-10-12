@@ -59,6 +59,7 @@ public class ConfigManager {
 	public boolean hungerDisabled;
 	public boolean fallDamageDisabled;
     public boolean entityDamageDisabled;
+    public boolean allDamageDisabled;
 	public boolean weatherDisabled;
 	public boolean itemDroppingDisabled;
 	public boolean itemPickupDisabled;
@@ -134,6 +135,7 @@ public class ConfigManager {
 			hungerDisabled = disabledSection.getBoolean("hunger");
 			fallDamageDisabled = disabledSection.getBoolean("fall damage");
 		    entityDamageDisabled = disabledSection.getBoolean("entity damage");
+		    allDamageDisabled = disabledSection.getBoolean("all damage");
 			weatherDisabled = disabledSection.getBoolean("weather");
 			itemDroppingDisabled = disabledSection.getBoolean("item dropping");
 			itemPickupDisabled = disabledSection.getBoolean("item pickup");

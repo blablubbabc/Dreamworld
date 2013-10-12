@@ -88,10 +88,14 @@ public class PlayerListener extends AbstractListener {
 		if (event.getEntityType() == EntityType.PLAYER) {
 			DamageCause cause = event.getCause();
 			ConfigManager config = plugin.getConfigManager();
-			if ((cause == DamageCause.FALL && config.fallDamageDisabled) || ((cause == DamageCause.ENTITY_ATTACK || cause == DamageCause.PROJECTILE) && config.entityDamageDisabled)) {
+			if (config.allDamageDisabled || (cause == DamageCause.FALL && config.fallDamageDisabled) || ((cause == DamageCause.ENTITY_ATTACK || cause == DamageCause.PROJECTILE) && config.entityDamageDisabled)) {
 				Player player = (Player) event.getEntity();
 				if (plugin.getDreamManager().isDreaming(player.getName())) {
 					event.setCancelled(true);
+					if (cause == DamageCause.VOID) {
+						// respawn player:
+						plugin.getDreamManager().spawnPlayer(player);
+					}
 				}
 			}
 		}

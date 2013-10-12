@@ -87,6 +87,7 @@ dream:
     hunger: true
     fall damage: true
     entity damage: true
+    all damage: true
     item dropping: false
     item pickup: false
     weather: false
