@@ -43,6 +43,7 @@ public class PlayerListener extends AbstractListener {
 	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerDeath(PlayerDeathEvent event) {
+		// hopefully this will never be called:
 		plugin.getDreamManager().onPlayerDeath(event.getEntity());
 	}
 
@@ -88,14 +89,21 @@ public class PlayerListener extends AbstractListener {
 		if (event.getEntityType() == EntityType.PLAYER) {
 			DamageCause cause = event.getCause();
 			ConfigManager config = plugin.getConfigManager();
+			Player player = (Player) event.getEntity();
 			if (config.allDamageDisabled || (cause == DamageCause.FALL && config.fallDamageDisabled) || ((cause == DamageCause.ENTITY_ATTACK || cause == DamageCause.PROJECTILE) && config.entityDamageDisabled)) {
-				Player player = (Player) event.getEntity();
 				if (plugin.getDreamManager().isDreaming(player.getName())) {
 					event.setCancelled(true);
 					if (cause == DamageCause.VOID) {
 						// respawn player:
 						plugin.getDreamManager().spawnPlayer(player);
 					}
+				}
+			} else {
+				// prevent death:
+				if (event.getDamage() >= player.getHealth()) {
+					event.setCancelled(true);
+					// end dream:
+					plugin.getDreamManager().onPlayerDeath(player);
 				}
 			}
 		}
