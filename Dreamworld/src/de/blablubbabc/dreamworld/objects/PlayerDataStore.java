@@ -158,9 +158,20 @@ public class PlayerDataStore implements ConfigurationSerializable {
 	}
 	
 	public void restorePlayerFromDream(Player player) {
-		if (DreamworldPlugin.getInstance().getConfigManager().clearAndRestorePlayer) {
+		restorePlayer(player, true);
+	}
+	
+	public void restorePlayerToDream(Player player) {
+		restorePlayer(player, false);
+	}
+	
+	private void restorePlayer(Player player, boolean fromDream) {
+		boolean clear = DreamworldPlugin.getInstance().getConfigManager().clearAndRestorePlayer;
+		if (fromDream && clear) {
 			clearPlayer(player);
-			
+		}
+		
+		if (clear || !fromDream) {
 			// RESTORE PLAYER
 			// Inventory
 			if (invContent != null) {
@@ -190,27 +201,28 @@ public class PlayerDataStore implements ConfigurationSerializable {
 			player.setExp(exp);
 		}
 		
-		// undo fake rain:
-		if (DreamworldPlugin.getInstance().getConfigManager().fakeRain) {
-			player.resetPlayerWeather();
-		}
-		
 		// undo fake player time
 		if (DreamworldPlugin.getInstance().getConfigManager().fakeTimeEnabled) {
 			player.setPlayerTime(playerTime, playerTimeRelative);
 		}
 		
-		// gamemode:
-		player.setGameMode(gamemode);
-		
-		// teleport back:
-		Location teleportLocation = location.getBukkitLocation();
-		if (teleportLocation != null) {
-			player.teleport(teleportLocation);
-		} else {
-			DreamworldPlugin.getInstance().getLogger().severe("Restore location for player '" + playerName + "' is no longer available. Was the world '" + location.getWorldName() + "' unloaded or renamed?");
+		if (fromDream) {
+			// undo fake rain:
+			if (DreamworldPlugin.getInstance().getConfigManager().fakeRain) {
+				player.resetPlayerWeather();
+			}
+			
+			// gamemode:
+			player.setGameMode(gamemode);
+			
+			// teleport back:
+			Location teleportLocation = location.getBukkitLocation();
+			if (teleportLocation != null) {
+				player.teleport(teleportLocation);
+			} else {
+				DreamworldPlugin.getInstance().getLogger().severe("Restore location for player '" + playerName + "' is no longer available. Was the world '" + location.getWorldName() + "' unloaded or renamed?");
+			}
 		}
-		
 	}
 	
 	public GameMode getGameMode() {
@@ -219,41 +231,6 @@ public class PlayerDataStore implements ConfigurationSerializable {
 	
 	public SoftLocation getLocation() {
 		return location;
-	}
-	
-	public void restorePlayerToDream(Player player) {
-		// RESTORE PLAYER
-		// Inventory
-		if (invContent != null) {
-			player.getInventory().setContents(invContent);
-		}
-		if (invArmor != null) {
-			player.getInventory().setArmorContents(invArmor);
-		}
-		// PotionEffects
-		for (PotionEffect effect : potionEffects) {
-			player.addPotionEffect(effect);
-		}
-		// Flying
-		player.setAllowFlight(allowFlight);
-		player.setFlying(isFlying);
-		// Status
-		// player.setGameMode(gamemode);
-		player.setExhaustion(exhaustion);
-		player.setSaturation(saturation);
-		player.setFoodLevel(foodlevel);
-		// health
-		player.setHealth(health);
-		player.setHealthScale(healthScale);
-		player.setHealthScaled(healthScaled);
-		// Level / exp
-		player.setLevel(level);
-		player.setExp(exp);
-		
-		// undo fake player time
-		if (DreamworldPlugin.getInstance().getConfigManager().fakeTimeEnabled) {
-			player.setPlayerTime(playerTime, playerTimeRelative);
-		}
 	}
 
 	@Override

@@ -156,7 +156,7 @@ public class DreamManager {
 				PlayerDataStore newStore = new PlayerDataStore(player, dreamLocation, storedDream.getGameMode());
 				
 				// restore dream state:
-				dreamData.getPlayerData().restorePlayerToDream(player);
+				storedDream.restorePlayerToDream(player);
 				
 				// save the old player state:
 				dreamData.setPlayerData(newStore);
