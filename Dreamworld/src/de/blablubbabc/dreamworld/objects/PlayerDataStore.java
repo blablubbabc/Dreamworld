@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -46,10 +45,14 @@ public class PlayerDataStore implements ConfigurationSerializable {
 	private boolean playerTimeRelative;
 	private long playerTime;
 	
-
+	// store to dream
+	public PlayerDataStore(Player player, Location targetLocation, GameMode targetGameMode) {
+		storePlayer(player, targetLocation, targetGameMode);
+	}
+	
+	// store from dream
 	public PlayerDataStore(Player player) {
-		this.playerName = player.getName();
-		storePlayer();
+		storePlayer(player);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -74,12 +77,12 @@ public class PlayerDataStore implements ConfigurationSerializable {
 		this.playerTimeRelative = (Boolean) map.get("is playertime relative");
 		this.playerTime = (Long) map.get("playertime");
 	}
-
-	public void storePlayer() {
-		Player player = Bukkit.getPlayerExact(playerName);
-		// STORE DATA
+	
+	private void storePlayer(Player player) {
+		// STORE REMAINING DATA
+		playerName = player.getName();
 		// Location
-		location = new SoftLocation(player.getLocation());
+		if (location == null) location = new SoftLocation(player.getLocation());
 		// Inventory
 		player.closeInventory();
 		PlayerInventory inv = player.getInventory();
@@ -91,7 +94,7 @@ public class PlayerDataStore implements ConfigurationSerializable {
 		allowFlight = player.getAllowFlight();
 		isFlying = player.isFlying();
 		// Status
-		gamemode = player.getGameMode();
+		if (gamemode == null) gamemode = player.getGameMode();
 		exhaustion = player.getExhaustion();
 		saturation = player.getSaturation();
 		foodlevel = player.getFoodLevel();
@@ -109,12 +112,26 @@ public class PlayerDataStore implements ConfigurationSerializable {
 		
 		// CLEAR
 		if (DreamworldPlugin.getInstance().getConfigManager().clearAndRestorePlayer) {
-			clearPlayer();
+			clearPlayer(player);
 		}
 	}
 
-	public void clearPlayer() {
-		Player player = Bukkit.getPlayerExact(playerName);
+	private void storePlayer(Player player, Location targetLocation, GameMode targetGameMode) {
+		// TELEPORT
+		location = new SoftLocation(player.getLocation());
+		player.leaveVehicle();
+		player.closeInventory();
+		if (targetLocation != null) player.teleport(targetLocation);
+		
+		// GAMEMODE
+		gamemode = player.getGameMode();
+		if (targetGameMode != null) player.setGameMode(targetGameMode);
+		
+		// STORE REMAINING DATA
+		storePlayer(player);
+	}
+
+	private void clearPlayer(Player player) {
 		// CLEAR PLAYER
 		// Inventory
 		player.closeInventory();
@@ -127,7 +144,7 @@ public class PlayerDataStore implements ConfigurationSerializable {
 		player.setAllowFlight(false);
 		player.setFlying(false);
 		
-		player.setGameMode(GameMode.ADVENTURE);
+		//player.setGameMode(GameMode.ADVENTURE);
 		player.setFoodLevel(20);
 		player.setSaturation(20.0F);
 		player.setExhaustion(0.0F);
@@ -139,17 +156,10 @@ public class PlayerDataStore implements ConfigurationSerializable {
 		player.setLevel(0);
 		player.setExp(0F);
 	}
-
-	public boolean isValidLocation() {
-		Location teleportLocation = location.getBukkitLocation();
-		return teleportLocation != null;
-	}
 	
-	public void restorePlayer() {
-		Player player = Bukkit.getPlayerExact(playerName);
-		
+	public void restorePlayerFromDream(Player player) {
 		if (DreamworldPlugin.getInstance().getConfigManager().clearAndRestorePlayer) {
-			clearPlayer();
+			clearPlayer(player);
 			
 			// RESTORE PLAYER
 			// Inventory
@@ -167,7 +177,7 @@ public class PlayerDataStore implements ConfigurationSerializable {
 			player.setAllowFlight(allowFlight);
 			player.setFlying(isFlying);
 			// Status
-			player.setGameMode(gamemode);
+			//player.setGameMode(gamemode);
 			player.setExhaustion(exhaustion);
 			player.setSaturation(saturation);
 			player.setFoodLevel(foodlevel);
@@ -186,9 +196,14 @@ public class PlayerDataStore implements ConfigurationSerializable {
 		}
 		
 		// undo fake player time
-		player.setPlayerTime(playerTime, playerTimeRelative);
+		if (DreamworldPlugin.getInstance().getConfigManager().fakeTimeEnabled) {
+			player.setPlayerTime(playerTime, playerTimeRelative);
+		}
 		
-		// location
+		// gamemode:
+		player.setGameMode(gamemode);
+		
+		// teleport back:
 		Location teleportLocation = location.getBukkitLocation();
 		if (teleportLocation != null) {
 			player.teleport(teleportLocation);
@@ -196,6 +211,49 @@ public class PlayerDataStore implements ConfigurationSerializable {
 			DreamworldPlugin.getInstance().getLogger().severe("Restore location for player '" + playerName + "' is no longer available. Was the world '" + location.getWorldName() + "' unloaded or renamed?");
 		}
 		
+	}
+	
+	public GameMode getGameMode() {
+		return gamemode;
+	}
+	
+	public SoftLocation getLocation() {
+		return location;
+	}
+	
+	public void restorePlayerToDream(Player player) {
+		// RESTORE PLAYER
+		// Inventory
+		if (invContent != null) {
+			player.getInventory().setContents(invContent);
+		}
+		if (invArmor != null) {
+			player.getInventory().setArmorContents(invArmor);
+		}
+		// PotionEffects
+		for (PotionEffect effect : potionEffects) {
+			player.addPotionEffect(effect);
+		}
+		// Flying
+		player.setAllowFlight(allowFlight);
+		player.setFlying(isFlying);
+		// Status
+		// player.setGameMode(gamemode);
+		player.setExhaustion(exhaustion);
+		player.setSaturation(saturation);
+		player.setFoodLevel(foodlevel);
+		// health
+		player.setHealth(health);
+		player.setHealthScale(healthScale);
+		player.setHealthScaled(healthScaled);
+		// Level / exp
+		player.setLevel(level);
+		player.setExp(exp);
+		
+		// undo fake player time
+		if (DreamworldPlugin.getInstance().getConfigManager().fakeTimeEnabled) {
+			player.setPlayerTime(playerTime, playerTimeRelative);
+		}
 	}
 
 	@Override

@@ -60,7 +60,7 @@ public class DreamManager {
 	private void leaveDream(Player player, DreamData dreamData) {
 		if (dreamData != null) {
 			// restore player:
-			dreamData.getPlayerData().restorePlayer();
+			dreamData.getPlayerData().restorePlayerFromDream(player);
 			
 			// inform player:
 			player.sendMessage(Messages.getMessage(Message.DREAM_LEAVE));
@@ -76,15 +76,18 @@ public class DreamManager {
 	}
 	
 	public void spawnPlayer(Player player) {
+		player.leaveVehicle(); // just in case..
+		player.teleport(getSpawnLocation());
+	}
+	
+	private Location getSpawnLocation() {
 		ConfigManager config = plugin.getConfigManager();
 		Location dreamSpawn = null;
 		if (!config.spawnRandomly || config.dreamSpawns.isEmpty() || (dreamSpawn = config.dreamSpawns.get(random.nextInt(config.dreamSpawns.size())).getBukkitLocation()) == null) {
 			World dreamWorld = plugin.getDreamWorld();
 			dreamSpawn = dreamWorld.getSpawnLocation();
 		}
-		
-		player.leaveVehicle(); // just in case..
-		player.teleport(dreamSpawn);
+		return dreamSpawn;
 	}
 	
 	private void startDreaming(Player player) {
@@ -97,17 +100,15 @@ public class DreamManager {
 		if (dreamDuration <= config.ignoreIfRemainingTimeIsLowerThan) return;
 		
 		// store current player state:
-		PlayerDataStore playerData = new PlayerDataStore(player);
+		PlayerDataStore playerData = new PlayerDataStore(player, getSpawnLocation(), config.applyInitialGamemode ? config.initialGamemode : null);
 		
 		// create dream data:
 		DreamData dreamData = new DreamData(playerData, System.currentTimeMillis(), dreamDuration);
 		
 		// do initialization:
 		
-		// spawn:
-		spawnPlayer(player);
-		
-		if (config.applyInitialGamemode) player.setGameMode(config.initialGamemode);
+		// spawning and gamemode is already handled by the player's data store
+		//if (config.applyInitialGamemode) player.setGameMode(config.initialGamemode);
 		if (config.applyInitialHealth) player.setHealth(config.initialHealth);
 		if (config.applyInitialHunger) player.setFoodLevel(config.initialHunger);
 		if (config.applyInitialPotionEffects && !config.initialPotionEffects.isEmpty()) player.addPotionEffects(config.initialPotionEffects);
@@ -142,11 +143,20 @@ public class DreamManager {
 			plugin.getDreamDataStore().removeDreamData(playerName, save);
 			
 			if (dreamData.getRemainingSeconds() >= plugin.getConfigManager().ignoreIfRemainingTimeIsLowerThan) {
-				// store current dreaming player:
-				PlayerDataStore newStore = new PlayerDataStore(player);
+				// stored dream:
+				PlayerDataStore storedDream = dreamData.getPlayerData();
+				
+				// store current player and start dreaming:
+				Location dreamLocation = storedDream.getLocation().getBukkitLocation();
+				if (dreamLocation == null) {
+					plugin.getLogger().warning("Continue dream failed: Couldn't find old dream location (world: '" + storedDream.getLocation().getWorldName() + "') for player '" + playerName + "'. Respawning him now at another dream spawn.");
+					dreamLocation = getSpawnLocation();
+				}
+				
+				PlayerDataStore newStore = new PlayerDataStore(player, dreamLocation, storedDream.getGameMode());
 				
 				// restore dream state:
-				dreamData.getPlayerData().restorePlayer();
+				dreamData.getPlayerData().restorePlayerToDream(player);
 				
 				// save the old player state:
 				dreamData.setPlayerData(newStore);
@@ -191,7 +201,7 @@ public class DreamManager {
 			}
 			
 			// restore to old player data:
-			oldPlayerData.restorePlayer();
+			oldPlayerData.restorePlayerFromDream(player);
 		}
 	}
 	
