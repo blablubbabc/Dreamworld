@@ -73,9 +73,9 @@ public class ConfigManager {
 	public ConfigManager(Plugin plugin) {
 		this.plugin = plugin;
 		// default config:
+		plugin.saveDefaultConfig();
 		FileConfiguration config = plugin.getConfig();
 		config.options().copyDefaults(true);
-		plugin.saveDefaultConfig();
 		
 		// load values:
 		
@@ -119,7 +119,7 @@ public class ConfigManager {
 						plugin.getLogger().warning("Invalid potion effect type '" + type + "'. Skipping this effect now. You can find a list of all possible PotionEffectTypes by googling 'bukkit PotionEffectType'.");
 						continue;
 					}
-					initialPotionEffects.add(new PotionEffect(potionType, potionSection.getInt("duration"), potionSection.getInt("level", 1)));
+					initialPotionEffects.add(new PotionEffect(potionType, potionSection.getInt("duration"), potionSection.getInt("level")));
 				}
 			}
 			
