@@ -102,14 +102,12 @@ public class DreamworldPlugin extends JavaPlugin {
 		// command manager:
 		new CommandManager(this);
 		
-		getLogger().info("Enabled");
 	}
 	
 	@Override
 	public void onDisable() {
 		if (dreamManager != null) dreamManager.onDisable();
 		instance = null;
-		getLogger().info("Disabled");
 	}
 	
 }

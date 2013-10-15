@@ -92,6 +92,8 @@ dream:
     item dropping: false
     item pickup: false
     weather: false
+    block placing: false
+    block breaking: false
 
   # A list of allowed commands. All other commands are blocked for non-admin players. Make sure to not put any kind of teleportation command in here:
   allowed commands:

@@ -63,6 +63,8 @@ public class ConfigManager {
 	public boolean weatherDisabled;
 	public boolean itemDroppingDisabled;
 	public boolean itemPickupDisabled;
+	public boolean blockPlacingDisabled;
+	public boolean blockBreakingDisabled;
 	
 	// allowed commands:
 	public List<String> allowedCommands;
@@ -144,6 +146,8 @@ public class ConfigManager {
 			weatherDisabled = disabledSection.getBoolean("weather");
 			itemDroppingDisabled = disabledSection.getBoolean("item dropping");
 			itemPickupDisabled = disabledSection.getBoolean("item pickup");
+			blockPlacingDisabled = disabledSection.getBoolean("block placing");
+			blockBreakingDisabled = disabledSection.getBoolean("block breaking");
 			
 			// allowed commands:
 			allowedCommands = dreamSection.getStringList("allowed commands");

@@ -6,6 +6,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -128,7 +129,7 @@ public class PlayerListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onItemDrop(PlayerDropItemEvent event) {
 		Player player = event.getPlayer();
-		if (plugin.getDreamManager().isDreaming(player.getName())) {
+		if (plugin.getConfigManager().itemDroppingDisabled && plugin.getDreamManager().isDreaming(player.getName())) {
 			event.setCancelled(true);
 		}
 	}
@@ -136,7 +137,23 @@ public class PlayerListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onItemPickup(PlayerPickupItemEvent event) {
 		Player player = event.getPlayer();
-		if (plugin.getDreamManager().isDreaming(player.getName())) {
+		if (plugin.getConfigManager().itemPickupDisabled && plugin.getDreamManager().isDreaming(player.getName())) {
+			event.setCancelled(true);
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onBlockPlacing(BlockBreakEvent event) {
+		Player player = event.getPlayer();
+		if (plugin.getConfigManager().blockPlacingDisabled && plugin.getDreamManager().isDreaming(player.getName())) {
+			event.setCancelled(true);
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onBlockBreak(PlayerDropItemEvent event) {
+		Player player = event.getPlayer();
+		if (plugin.getConfigManager().blockBreakingDisabled && plugin.getDreamManager().isDreaming(player.getName())) {
 			event.setCancelled(true);
 		}
 	}
