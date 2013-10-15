@@ -119,7 +119,7 @@ public class ConfigManager {
 						plugin.getLogger().warning("Invalid potion effect type '" + type + "'. Skipping this effect now. You can find a list of all possible PotionEffectTypes by googling 'bukkit PotionEffectType'.");
 						continue;
 					}
-					initialPotionEffects.add(new PotionEffect(potionType, potionSection.getInt("duration"), potionSection.getInt("level")));
+					initialPotionEffects.add(new PotionEffect(potionType, potionSection.getInt("duration"), potionSection.getInt("level", 1) - 1));
 				}
 			}
 			
