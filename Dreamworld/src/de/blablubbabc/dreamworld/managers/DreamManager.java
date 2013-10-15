@@ -141,8 +141,9 @@ public class DreamManager {
 		DreamData dreamData = plugin.getDreamDataStore().getStoredDreamData(playerName);
 		if (dreamData != null) {
 			plugin.getDreamDataStore().removeDreamData(playerName, save);
+			ConfigManager config = plugin.getConfigManager();
 			
-			if (dreamData.getRemainingSeconds() >= plugin.getConfigManager().ignoreIfRemainingTimeIsLowerThan) {
+			if (dreamData.getRemainingSeconds() >= config.ignoreIfRemainingTimeIsLowerThan) {
 				// stored dream:
 				PlayerDataStore storedDream = dreamData.getPlayerData();
 				
@@ -157,6 +158,10 @@ public class DreamManager {
 				
 				// restore dream state:
 				storedDream.restorePlayerToDream(player);
+				// fake rain:
+				if (config.fakeRain) {
+					player.setPlayerWeather(WeatherType.DOWNFALL);
+				}
 				
 				// save the old player state:
 				dreamData.setPlayerData(newStore);
