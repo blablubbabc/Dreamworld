@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 import de.blablubbabc.dreamworld.DreamworldPlugin;
 import de.blablubbabc.dreamworld.managers.ConfigManager;
@@ -45,6 +46,21 @@ public class PlayerListener extends AbstractListener {
 	public void onPlayerDeath(PlayerDeathEvent event) {
 		// hopefully this will never be called:
 		plugin.getDreamManager().onPlayerDeath(event.getEntity());
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onPlayerRespawn(PlayerRespawnEvent event) {
+		// this should only be necessary, if the player was dead during plugin enable and coudln't continue his dream there:
+		final Player player = event.getPlayer();
+		if (plugin.getDreamDataStore().getStoredDreamData(player.getName()) != null) {
+			plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
+				
+				@Override
+				public void run() {
+					if (player.isOnline() && !player.isDead()) plugin.getDreamManager().continueDreaming(player, false);
+				}
+			}, 1L);
+		}
 	}
 
 	// disabled stuff during dreaming:
