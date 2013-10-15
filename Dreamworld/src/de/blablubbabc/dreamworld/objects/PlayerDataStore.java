@@ -75,7 +75,7 @@ public class PlayerDataStore implements ConfigurationSerializable {
 		this.level = (Integer) map.get("level");
 		this.exp = ((Double) map.get("exp")).floatValue();
 		this.playerTimeRelative = (Boolean) map.get("is playertime relative");
-		this.playerTime = ((Integer) map.get("playertime")).longValue();
+		this.playerTime = (Long) map.get("playertime");
 	}
 	
 	private void storePlayer(Player player) {
@@ -165,6 +165,7 @@ public class PlayerDataStore implements ConfigurationSerializable {
 		restorePlayer(player, false);
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void restorePlayer(Player player, boolean fromDream) {
 		boolean clear = DreamworldPlugin.getInstance().getConfigManager().clearAndRestorePlayer;
 		if (fromDream && clear) {
@@ -223,6 +224,8 @@ public class PlayerDataStore implements ConfigurationSerializable {
 				DreamworldPlugin.getInstance().getLogger().severe("Restore location for player '" + playerName + "' is no longer available. Was the world '" + location.getWorldName() + "' unloaded or renamed?");
 			}
 		}
+		
+		player.updateInventory();
 	}
 	
 	public GameMode getGameMode() {

@@ -74,6 +74,15 @@ public class DreamworldPlugin extends JavaPlugin {
 		// dream manager:
 		dreamManager = new DreamManager(this);
 		
+		// world listener:
+		new WorldListener(this);
+				
+		// player listener:
+		new PlayerListener(this);
+				
+		// command manager:
+		new CommandManager(this);
+		
 		// after server start:
 		getServer().getScheduler().runTaskLater(this, new Runnable() {
 			
@@ -92,15 +101,6 @@ public class DreamworldPlugin extends JavaPlugin {
 				
 			}
 		}, 1L);
-		
-		// world listener:
-		new WorldListener(this);
-		
-		// player listener:
-		new PlayerListener(this);
-		
-		// command manager:
-		new CommandManager(this);
 		
 	}
 	
