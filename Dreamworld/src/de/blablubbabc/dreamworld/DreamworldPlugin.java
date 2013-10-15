@@ -2,12 +2,9 @@ package de.blablubbabc.dreamworld;
 
 import java.io.File;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -65,6 +62,11 @@ public class DreamworldPlugin extends JavaPlugin {
 		
 		// init and load config:
 		configManager = new ConfigManager(this);
+		if (!configManager.wasConfigValid()) {
+			getLogger().severe("Something went wrong during the reading of the config file! Please verify that all your values are valid! Disabling now.");
+			Bukkit.getServer().getPluginManager().disablePlugin(this);
+			return;
+		}
 		
 		// dream data store:
 		dreamDataStore = new DreamDataStore(this);
@@ -105,7 +107,7 @@ public class DreamworldPlugin extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
-		dreamManager.onDisable();
+		if (dreamManager != null) dreamManager.onDisable();
 		instance = null;
 		getLogger().info("Disabled");
 	}

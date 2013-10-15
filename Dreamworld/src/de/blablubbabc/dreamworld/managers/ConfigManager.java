@@ -3,7 +3,6 @@ package de.blablubbabc.dreamworld.managers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -17,6 +16,7 @@ import de.blablubbabc.dreamworld.objects.SoftLocation;
 public class ConfigManager {
 	
 	private Plugin plugin;
+	private boolean wasConfigValid = false;
 	
 	// world settings:
 	public String dreamWorldName;
@@ -143,11 +143,16 @@ public class ConfigManager {
 			// allowed commands:
 			allowedCommands = dreamSection.getStringList("allowed commands");
 			
+			
+			wasConfigValid = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			plugin.getLogger().severe("Something went wrong during the reading of the config file! Please verify that all your values are valid! Disabling now.");
-			Bukkit.getServer().getPluginManager().disablePlugin(plugin);
+			wasConfigValid = false;
 		}
+	}
+	
+	public boolean wasConfigValid() {
+		return wasConfigValid;
 	}
 	
 	public void addSpawnLocation(Location location) {
