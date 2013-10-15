@@ -10,7 +10,6 @@ public class DreamData implements ConfigurationSerializable {
 	private final long startTime;
 	private int remainingSeconds;
 	
-	// can be null (!)
 	private PlayerDataStore playerData;
 	
 	public DreamData(PlayerDataStore playerData, long startTime, int remainingSeconds) {
@@ -21,10 +20,9 @@ public class DreamData implements ConfigurationSerializable {
 	
 	@SuppressWarnings("unchecked")
 	public DreamData(String playerName, Map<String, Object> map) {
-		this(map.containsKey("player data") ? new PlayerDataStore(playerName, (Map<String, Object>) map.get("player data")) : null, (Long) map.get("start time"), (Integer) map.get("remaining seconds"));
+		this(new PlayerDataStore(playerName, (Map<String, Object>) map.get("player data")), (Long) map.get("start time"), (Integer) map.get("remaining seconds"));
 	}
 	
-	// can be null (!)// an be 
 	public PlayerDataStore getPlayerData() {
 		return playerData;
 	}
@@ -51,7 +49,7 @@ public class DreamData implements ConfigurationSerializable {
 		
 		map.put("start time", new Long(startTime));
 		map.put("remaining seconds", new Integer(remainingSeconds));
-		if (playerData != null) map.put("player data", playerData.serialize());
+		map.put("player data", playerData.serialize());
 		
 		return map;
 	}

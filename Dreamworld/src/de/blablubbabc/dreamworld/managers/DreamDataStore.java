@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import de.blablubbabc.dreamworld.DreamworldPlugin;
@@ -18,7 +19,6 @@ public class DreamDataStore {
 	private final YamlConfiguration store;
 	private Map<String, DreamData> storedDreams = new HashMap<String, DreamData>();
 	
-	@SuppressWarnings("unchecked")
 	public DreamDataStore(final DreamworldPlugin plugin) {
 		this.plugin = plugin;
 		// load saved data:
@@ -29,7 +29,8 @@ public class DreamDataStore {
 		
 		// load dream data:
 		for (String playerName : store.getKeys(false)) {
-			storedDreams.put(playerName, new DreamData(playerName, (Map<String, Object>) store.get(playerName)));
+			Map<String, Object> values = getValuesAsMap(store.getConfigurationSection(playerName));
+			storedDreams.put(playerName, new DreamData(playerName, values));
 		}
 		
 		// start purge process:
@@ -60,6 +61,16 @@ public class DreamDataStore {
 				if (dirty) saveCurrentDreamData();
 			}
 		}, 20L, 20 * 60L);
+	}
+		
+	private Map<String, Object> getValuesAsMap(ConfigurationSection section) {
+		Map<String, Object> values = section.getValues(false);
+		for (Entry<String, Object> entry : values.entrySet()) {
+			if (entry.getValue() instanceof ConfigurationSection) {
+				entry.setValue(getValuesAsMap((ConfigurationSection) entry.getValue()));
+			}
+		}
+		return values;
 	}
 	
 	public DreamData getStoredDreamData(String playerName) {
