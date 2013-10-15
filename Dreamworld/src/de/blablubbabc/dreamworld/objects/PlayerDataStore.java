@@ -66,16 +66,16 @@ public class PlayerDataStore implements ConfigurationSerializable {
 		this.allowFlight = (Boolean) map.get("allow flight");
 		this.isFlying = (Boolean) map.get("is flying");
 		this.gamemode = GameMode.getByValue((Integer) map.get("gamemode"));
-		this.exhaustion = (Float) map.get("exhaustion");
-		this.saturation = (Float) map.get("saturation");
+		this.exhaustion = ((Double) map.get("exhaustion")).floatValue();
+		this.saturation = ((Double) map.get("saturation")).floatValue();
 		this.foodlevel = (Integer) map.get("foodlevel");
 		this.health = (Double) map.get("health");
 		this.healthScale = (Double) map.get("health scale");
 		this.healthScaled = (Boolean) map.get("is health scaled");
 		this.level = (Integer) map.get("level");
-		this.exp = (Float) map.get("exp");
+		this.exp = ((Double) map.get("exp")).floatValue();
 		this.playerTimeRelative = (Boolean) map.get("is playertime relative");
-		this.playerTime = (Long) map.get("playertime");
+		this.playerTime = ((Integer) map.get("playertime")).longValue();
 	}
 	
 	private void storePlayer(Player player) {

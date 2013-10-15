@@ -86,7 +86,7 @@ public class DreamworldPlugin extends JavaPlugin {
 				
 				// continue dreams:
 				for (Player player : getServer().getOnlinePlayers()) {
-					getDreamManager().continueDreaming(player, false);
+					if (!player.isDead()) getDreamManager().continueDreaming(player, false);
 				}
 				getDreamDataStore().saveCurrentDreamData();
 				
