@@ -114,7 +114,7 @@ public class ConfigManager {
 					if (potionSection == null) continue;
 					PotionEffectType potionType = PotionEffectType.getByName(type);
 					if (potionType == null) {
-						plugin.getLogger().warning("Invalid potion effect type '" + type + "'. Skipping this effect now.");
+						plugin.getLogger().warning("Invalid potion effect type '" + type + "'. Skipping this effect now. You can find a list of all possible PotionEffectTypes by googling 'bukkit PotionEffectType'.");
 						continue;
 					}
 					initialPotionEffects.add(new PotionEffect(potionType, potionSection.getInt("duration"), potionSection.getInt("level", 1)));
