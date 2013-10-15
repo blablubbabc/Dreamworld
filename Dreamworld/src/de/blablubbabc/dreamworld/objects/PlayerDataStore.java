@@ -42,7 +42,7 @@ public class PlayerDataStore implements ConfigurationSerializable {
 	// level / exp
 	private int level;
 	private float exp;
-	// player time
+	// player time and weather
 	private boolean playerTimeRelative;
 	private long playerTime;
 	
@@ -180,6 +180,14 @@ public class PlayerDataStore implements ConfigurationSerializable {
 			player.setExp(exp);
 		}
 		
+		// undo fake rain:
+		if (DreamworldPlugin.getInstance().getConfigManager().fakeRain) {
+			player.resetPlayerWeather();
+		}
+		
+		// undo fake player time
+		player.setPlayerTime(playerTime, playerTimeRelative);
+		
 		// location
 		Location teleportLocation = location.getBukkitLocation();
 		if (teleportLocation != null) {
@@ -187,9 +195,6 @@ public class PlayerDataStore implements ConfigurationSerializable {
 		} else {
 			DreamworldPlugin.getInstance().getLogger().severe("Restore location for player '" + playerName + "' is no longer available. Was the world '" + location.getWorldName() + "' unloaded or renamed?");
 		}
-		
-		// player time
-		player.setPlayerTime(playerTimeRelative ? teleportLocation.getWorld().getTime() + playerTime: playerTime, playerTimeRelative);
 		
 	}
 
