@@ -112,7 +112,12 @@ public class ConfigManager {
 				for (String type : potionsSection.getKeys(false)) {
 					ConfigurationSection potionSection = potionsSection.getConfigurationSection(type);
 					if (potionSection == null) continue;
-					initialPotionEffects.add(new PotionEffect(PotionEffectType.getByName(type), potionSection.getInt("duration"), potionSection.getInt("level", 1)));
+					PotionEffectType potionType = PotionEffectType.getByName(type);
+					if (potionType == null) {
+						plugin.getLogger().warning("Invalid potion effect type '" + type + "'. Skipping this effect now.");
+						continue;
+					}
+					initialPotionEffects.add(new PotionEffect(potionType, potionSection.getInt("duration"), potionSection.getInt("level", 1)));
 				}
 			}
 			
