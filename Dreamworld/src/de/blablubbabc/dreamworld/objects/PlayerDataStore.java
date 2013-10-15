@@ -75,7 +75,14 @@ public class PlayerDataStore implements ConfigurationSerializable {
 		this.level = (Integer) map.get("level");
 		this.exp = ((Double) map.get("exp")).floatValue();
 		this.playerTimeRelative = (Boolean) map.get("is playertime relative");
-		this.playerTime = (Long) map.get("playertime");
+		
+		Object playerTimeObject = map.get("playertime");
+		if (playerTimeObject instanceof Long) {
+			this.playerTime = (Long) playerTimeObject;
+		} else {
+			this.playerTime = ((Integer) playerTimeObject).longValue();
+		}
+		
 	}
 	
 	private void storePlayer(Player player) {
