@@ -115,7 +115,7 @@ public class DreamManager {
 		
 		// fake time:
 		if (config.fakeTimeEnabled) {
-			int time = config.fakeTime - config.fakeTimeRandomBounds + random.nextInt(config.fakeTime + config.fakeTimeRandomBounds);
+			int time = config.fakeTimeRandomBounds <= 0 ? config.fakeTime : config.fakeTime - config.fakeTimeRandomBounds + random.nextInt(2 * config.fakeTimeRandomBounds);
 			player.setPlayerTime(time, !config.fakeTimeFixed);
 		}
 		

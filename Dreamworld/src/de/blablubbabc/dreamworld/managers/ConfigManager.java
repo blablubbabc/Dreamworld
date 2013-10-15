@@ -131,7 +131,7 @@ public class ConfigManager {
 			ConfigurationSection fakeTimeSection = dreamSection.getConfigurationSection("fake client time");
 			fakeTimeEnabled = fakeTimeSection.getBoolean("enabled") ;
 			fakeTime = fakeTimeSection.getInt("time (in ticks)");
-			fakeTimeRandomBounds = fakeTimeSection.getInt("random bounds");
+			fakeTimeRandomBounds = Math.abs(fakeTimeSection.getInt("random bounds"));
 			fakeTimeFixed = fakeTimeSection.getBoolean("fixed time");
 			
 			// fake weather
