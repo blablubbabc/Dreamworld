@@ -189,9 +189,7 @@ public class PlayerDataStore implements ConfigurationSerializable {
 		}
 		
 		// player time
-		if (!playerTimeRelative || playerTime != 0) {
-			player.setPlayerTime(playerTimeRelative ? teleportLocation.getWorld().getTime() + playerTime: playerTime, playerTimeRelative);
-		}
+		player.setPlayerTime(playerTimeRelative ? teleportLocation.getWorld().getTime() + playerTime: playerTime, playerTimeRelative);
 		
 	}
 
