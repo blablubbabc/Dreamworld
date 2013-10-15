@@ -75,7 +75,7 @@ public class ConfigManager {
 		// default config:
 		plugin.saveDefaultConfig();
 		FileConfiguration config = plugin.getConfig();
-		config.options().copyDefaults(true);
+		//config.options().copyDefaults(true);
 		
 		// load values:
 		
