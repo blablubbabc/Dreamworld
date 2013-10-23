@@ -146,6 +146,8 @@ public class ConfigManager {
 			// dream start sound:
 			ConfigurationSection soundSection = dreamSection.getConfigurationSection("dream start sound");
 			soundEnabled = soundSection.getBoolean("enabled");
+			
+			randomSounds = new ArrayList<SoundData>();
 			for (String soundString : soundSection.getStringList("random sounds list")) {
 				String[] split = soundString.split(";");
 				if (split.length != 3) {
@@ -153,27 +155,27 @@ public class ConfigManager {
 					continue;
 				}
 				
+				Sound sound;
 				try {
-					Sound sound = Sound.valueOf(split[0]);
-					Float volumn = parseFloat(split[1]);
-					if (volumn == null) {
-						plugin.getLogger().warning("Invalid sound volumn: '" + split[1] + "'.");
-						continue;
-					}
-					Float pitch = parseFloat(split[2]);
-					if (pitch == null) {
-						plugin.getLogger().warning("Invalid sound pitch: '" + split[2] + "'.");
-						continue;
-					}
-					
-					// add sound data:
-					randomSounds.add(new SoundData(sound, volumn, pitch));
-					
-					
+					sound = Sound.valueOf(split[0]);
 				} catch (Exception e) {
 					plugin.getLogger().warning("Invalid sound: '" + split[0] + "'. You can find a list of all possible Sound names by googling 'bukkit Sound'.");
 					continue;
 				}
+				
+				Float volumn = parseFloat(split[1]);
+				if (volumn == null) {
+					plugin.getLogger().warning("Invalid sound volumn: '" + split[1] + "'.");
+					continue;
+				}
+				Float pitch = parseFloat(split[2]);
+				if (pitch == null) {
+					plugin.getLogger().warning("Invalid sound pitch: '" + split[2] + "'.");
+					continue;
+				}
+				
+				// add sound data:
+				randomSounds.add(new SoundData(sound, volumn, pitch));
 			}
 			
 			// disabled:

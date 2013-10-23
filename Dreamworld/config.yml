@@ -88,7 +88,7 @@ dream:
     # format: "sound;volumn;pitch"
     random sounds list:
     - "AMBIENCE_CAVE;1.0;1.0;"
-    - "WITHTER_SPAWN;1.0;1.0"
+    - "WITHER_SPAWN;1.0;1.0"
 
   # Disable various stuff for the dreaming player:
   disabled:
