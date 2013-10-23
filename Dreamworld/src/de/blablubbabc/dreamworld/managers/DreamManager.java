@@ -17,6 +17,7 @@ import de.blablubbabc.dreamworld.messages.Message;
 import de.blablubbabc.dreamworld.messages.Messages;
 import de.blablubbabc.dreamworld.objects.DreamData;
 import de.blablubbabc.dreamworld.objects.PlayerDataStore;
+import de.blablubbabc.dreamworld.objects.SoundData;
 
 public class DreamManager {
 	private DreamworldPlugin plugin;
@@ -124,6 +125,11 @@ public class DreamManager {
 			player.setPlayerWeather(WeatherType.DOWNFALL);
 		}
 		
+		// play sound:
+		if (config.soundEnabled && !config.randomSounds.isEmpty()) {
+			SoundData soundData = config.randomSounds.get(random.nextInt(config.randomSounds.size()));
+			player.playSound(player.getEyeLocation(), soundData.getSound(), soundData.getVolumn(), soundData.getPitch());
+		}
 		
 		onDreamingStart(player, dreamData);
 	}

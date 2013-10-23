@@ -81,6 +81,14 @@ dream:
   # Whether or not it shall rain for the dreaming player:
   fake client weather:
     raining: true
+    
+  # Whether or not it shall randomly pick one of the sounds from the list below and play it at dream start:
+  dream start sound:
+    enabled: true
+    # format: "sound;volumn;pitch"
+    random sounds list:
+    - "AMBIENCE_CAVE;1.0;1.0;"
+    - "WITHTER_SPAWN;1.0;1.0"
 
   # Disable various stuff for the dreaming player:
   disabled:

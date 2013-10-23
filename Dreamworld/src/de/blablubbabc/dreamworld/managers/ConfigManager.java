@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -12,6 +13,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import de.blablubbabc.dreamworld.objects.SoftLocation;
+import de.blablubbabc.dreamworld.objects.SoundData;
 
 public class ConfigManager {
 	
@@ -54,6 +56,10 @@ public class ConfigManager {
 	
 	// fake weather
 	public boolean fakeRain;
+	
+	// dream start sound:
+	public boolean soundEnabled;
+	public ArrayList<SoundData> randomSounds;
 	
 	// disabled:
 	public boolean hungerDisabled;
@@ -137,6 +143,39 @@ public class ConfigManager {
 			// fake weather
 			fakeRain = dreamSection.getBoolean("fake client weather.raining");
 			
+			// dream start sound:
+			ConfigurationSection soundSection = dreamSection.getConfigurationSection("dream start sound");
+			soundEnabled = soundSection.getBoolean("enabled");
+			for (String soundString : soundSection.getStringList("random sounds list")) {
+				String[] split = soundString.split(";");
+				if (split.length != 3) {
+					plugin.getLogger().warning("Invalid sound string: " + soundString);
+					continue;
+				}
+				
+				try {
+					Sound sound = Sound.valueOf(split[0]);
+					Float volumn = parseFloat(split[1]);
+					if (volumn == null) {
+						plugin.getLogger().warning("Invalid sound volumn: '" + split[1] + "'.");
+						continue;
+					}
+					Float pitch = parseFloat(split[2]);
+					if (pitch == null) {
+						plugin.getLogger().warning("Invalid sound pitch: '" + split[2] + "'.");
+						continue;
+					}
+					
+					// add sound data:
+					randomSounds.add(new SoundData(sound, volumn, pitch));
+					
+					
+				} catch (Exception e) {
+					plugin.getLogger().warning("Invalid sound: '" + split[0] + "'. You can find a list of all possible Sound names by googling 'bukkit Sound'.");
+					continue;
+				}
+			}
+			
 			// disabled:
 			ConfigurationSection disabledSection = dreamSection.getConfigurationSection("disabled");
 			hungerDisabled = disabledSection.getBoolean("hunger");
@@ -157,6 +196,14 @@ public class ConfigManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 			wasConfigValid = false;
+		}
+	}
+	
+	public Float parseFloat(String s) {
+		try {
+			return Float.parseFloat(s);
+		} catch (Exception e) {
+			return null;
 		}
 	}
 	
