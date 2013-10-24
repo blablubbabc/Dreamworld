@@ -157,6 +157,7 @@ public class PlayerDataStore implements ConfigurationSerializable {
 		player.setExhaustion(0.0F);
 		player.setHealth(20);
 		player.setFireTicks(0);
+		player.setFallDistance(0.0F);
 		
 		player.leaveVehicle();
 		// Level / exp
@@ -174,6 +175,8 @@ public class PlayerDataStore implements ConfigurationSerializable {
 	
 	@SuppressWarnings("deprecation")
 	private void restorePlayer(Player player, boolean fromDream) {
+		generalPlayerResets(player);
+		
 		boolean clear = DreamworldPlugin.getInstance().getConfigManager().clearAndRestorePlayer;
 		if (fromDream && clear) {
 			clearPlayer(player);
@@ -233,6 +236,13 @@ public class PlayerDataStore implements ConfigurationSerializable {
 		}
 		
 		player.updateInventory();
+	}
+	
+	private void generalPlayerResets(Player player) {
+		player.setFireTicks(0);
+		player.setFallDistance(0.0F);
+		player.leaveVehicle();
+		player.closeInventory();
 	}
 	
 	public GameMode getGameMode() {
